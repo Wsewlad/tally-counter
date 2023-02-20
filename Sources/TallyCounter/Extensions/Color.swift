@@ -8,10 +8,10 @@
 import SwiftUI
 
 extension Color {
-    static let screenBackground: Color = .init("screenBackground")
-    static let controlsBackground: Color = .init("controlsBackground")
-    static let labelBackground: Color = .init("labelBackground")
-    static let controls: Color = .init("controls")
+    static var screenBackground: Color { .init(#function, bundle: .module) }
+    static var controlsBackground: Color { .init(#function, bundle: .module) }
+    static var labelBackground: Color { .init(#function, bundle: .module) }
+    static var controls: Color { .init(#function, bundle: .module) }
     
 //    static let : Color = .init("")
 }

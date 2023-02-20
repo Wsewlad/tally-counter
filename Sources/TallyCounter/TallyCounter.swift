@@ -120,8 +120,7 @@ private extension TallyCounter {
         .padding(.horizontal, spacing)
         .background(
             RoundedRectangle(cornerRadius: controlsContainerCornerRadius)
-            // TODO: - add controlsBackground color
-                .fill(Color.gray)
+                .fill(Color.controlsBackground)
                 .overlay(
                     Color.black.opacity(controlsContainerOpacity)
                         .clipShape(RoundedRectangle(cornerRadius: controlsContainerCornerRadius))
@@ -138,8 +137,7 @@ private extension TallyCounter {
         Text("\(count)")
             .foregroundColor(.white)
             .frame(width: labelSize, height: labelSize)
-        // TODO: - add controlsBackground labelBackground
-            .background(Color.gray.opacity(0.8))
+            .background(Color.labelBackground.opacity(0.8))
             .clipShape(Circle())
             .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 5)
             .font(.system(size: labelFontSize, weight: .semibold, design: .rounded))
@@ -252,7 +250,6 @@ struct TallyCounter_Previews: PreviewProvider {
             TallyCounter()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        // TODO: - add controlsBackground screenBackground
-        .background(Color.black.edgesIgnoringSafeArea(.vertical))
+        .background(Color.screenBackground.edgesIgnoringSafeArea(.vertical))
     }
 }
