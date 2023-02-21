@@ -8,20 +8,37 @@
 import SwiftUI
 
 public struct TallyCounter: View {
+    //MARK: - Private
     private enum Direction {
         case none, left, right, down
     }
-    var controlsContainerWidth: CGFloat = 300
-    var minValue = 0
-    var maxValue = 999
     
-    @State var count: Int = 0
+    @State private var localAmount: Int = 0
     @State private var labelOffset: CGSize = .zero
     @State private var draggingDirection: Direction = .none
-    @State private var amount: Int = 0
     
-    public init() {
-        
+    //MARK: - Configurable
+    @Binding var count: Int
+    var bindingAmount: Binding<Int>?
+    var minValue: Int
+    var maxValue: Int
+    var controlsContainerWidth: CGFloat
+    var showAmountLabel: Bool
+    
+    public init(
+        count: Binding<Int>,
+        amount: Binding<Int>? = nil,
+        minValue: Int = 0,
+        maxValue: Int = 999,
+        controlsContainerWidth: CGFloat = 300,
+        showAmountLabel: Bool = true
+    ) {
+        self._count = count
+        self.bindingAmount = amount
+        self.minValue = minValue
+        self.maxValue = maxValue
+        self.controlsContainerWidth = controlsContainerWidth
+        self.showAmountLabel = showAmountLabel
     }
     
     public var body: some View {
@@ -59,7 +76,7 @@ public struct TallyCounter: View {
                     newAmount = maxValue - count
                 }
                 
-                self.amount = newAmount
+                self.amountProxy.wrappedValue = newAmount
             }
             .onEnded { value in
                 if draggingDirection == .right {
@@ -70,7 +87,7 @@ public struct TallyCounter: View {
                     self.reset()
                 }
                 
-                self.amount = 0
+                self.amountProxy.wrappedValue = 0
                 
                 withAnimation {
                     self.labelOffset = .zero
@@ -145,26 +162,28 @@ private extension TallyCounter {
             .onTapGesture {
                 self.count = maxValue
             }
-            .overlay(
-                VStack {
-                    HStack {
-                        Spacer()
-                        if amount != 0 {
-                            Text("\(amount > 0 ? "+" : "")\(amount)")
+            .if(showAmountLabel) {
+                $0.overlay(
+                    VStack {
+                        HStack {
+                            Spacer()
+                            if amount != 0 {
+                                Text("\(amount > 0 ? "+" : "")\(amount)")
+                            }
                         }
+                        .foregroundColor(.white.opacity(0.6))
+                        .font(.system(size: labelFontSize / 2, weight: .semibold, design: .rounded))
+                        .animation(.interactiveSpring())
+                        
+                        Spacer()
                     }
-                    .foregroundColor(.white.opacity(0.6))
-                    .font(.system(size: labelFontSize / 2, weight: .semibold, design: .rounded))
-                    .animation(.interactiveSpring())
-
-                    Spacer()
-                }
-            )
+                )
+            }
             .offset(self.labelOffset)
     }
 }
 
-//MARK: - Computed Properties
+//MARK: - Controls Computed Properties
 private extension TallyCounter {
     var defaultControlsOpacity: Double { 0.4 }
     var spacing: CGFloat { controlsContainerWidth / 10 }
@@ -198,7 +217,10 @@ private extension TallyCounter {
             return defaultControlsOpacity - controlsOpacity + labelOffsetXInPercents / 3.5
         }
     }
-    
+}
+
+//MARK: - Label Computed Properties
+private extension TallyCounter {
     var labelSize: CGFloat { controlsContainerWidth / 3 }
     var labelFontSize: CGFloat { labelSize / 2.5 }
     var labelOffsetXLimit: CGFloat { controlsContainerWidth / 3 + spacing }
@@ -209,6 +231,30 @@ private extension TallyCounter {
     var labelOffsetYInPercents: Double {
         Double(labelOffset.height / labelOffsetYLimit)
     }
+    
+    /// `Binding` workaround allowing optionally pass `amount` parameter to the component.
+    /// If `amount` is passed `TallyCounter(..., amount: $amount)`, it will be set to `bindingAmount` variable and used in  component.
+    /// Else `localAmount` will be used
+    var amountProxy: Binding<Int> {
+        .init(
+            get: {
+                if let bindingAmount {
+                    return bindingAmount.wrappedValue
+                } else {
+                    return localAmount
+                }
+            },
+            set: { newValue in
+                if bindingAmount != nil {
+                    bindingAmount?.wrappedValue = newValue
+                } else {
+                    localAmount = newValue
+                }
+            }
+        )
+    }
+    
+    var amount: Int { self.amountProxy.wrappedValue }
 }
 
 //MARK: - Helper methods
@@ -239,17 +285,31 @@ private extension TallyCounter {
     func reset() { self.count = 0 }
 }
 
-struct TallyCounter_Previews: PreviewProvider {
-    static var previews: some View {
+//MARK: - Preview
+struct PreviewWrapper: View {
+    @State private var count: Int = 0
+    @State private var amount: Int = 0
+    
+    var body: some View {
         VStack {
-            Image("logo")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .padding(34)
+            Text("\(amount)")
+                .font(.largeTitle)
+                .foregroundColor(.white)
             
-            TallyCounter()
+            TallyCounter(
+                count: $count,
+                amount: $amount,
+                controlsContainerWidth: 300,
+                showAmountLabel: false
+            )
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.screenBackground.edgesIgnoringSafeArea(.vertical))
+    }
+}
+
+struct TallyCounter_Previews: PreviewProvider {
+    static var previews: some View {
+        PreviewWrapper()
     }
 }
