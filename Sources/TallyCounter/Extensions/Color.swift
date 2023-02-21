@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension Color {
+public extension Color {
     static var screenBackground: Color { .init(#function, bundle: .module) }
     static var controlsBackground: Color { .init(#function, bundle: .module) }
     static var labelBackground: Color { .init(#function, bundle: .module) }

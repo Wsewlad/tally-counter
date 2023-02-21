@@ -20,25 +20,19 @@ public struct TallyCounter: View {
     //MARK: - Configurable
     @Binding var count: Int
     var bindingAmount: Binding<Int>?
-    var minValue: Int
-    var maxValue: Int
-    var controlsContainerWidth: CGFloat
-    var showAmountLabel: Bool
+    
+    @StateObject private var configurationStore: ConfigurationStore
+    
+    var config: Configuration { self.configurationStore.config }
     
     public init(
         count: Binding<Int>,
         amount: Binding<Int>? = nil,
-        minValue: Int = 0,
-        maxValue: Int = 999,
-        controlsContainerWidth: CGFloat = 300,
-        showAmountLabel: Bool = true
+        config: Configuration = Configuration()
     ) {
         self._count = count
         self.bindingAmount = amount
-        self.minValue = minValue
-        self.maxValue = maxValue
-        self.controlsContainerWidth = controlsContainerWidth
-        self.showAmountLabel = showAmountLabel
+        self._configurationStore = .init(wrappedValue: ConfigurationStore(config: config))
     }
     
     public var body: some View {
@@ -70,10 +64,10 @@ public struct TallyCounter: View {
                 
                 var newAmount = Int(labelOffsetXInPercents * 100)
                 
-                if newAmount < 0 && count + newAmount < minValue {
+                if newAmount < 0 && count + newAmount < config.minValue {
                     newAmount = -(count % newAmount)
-                } else if count + newAmount > maxValue {
-                    newAmount = maxValue - count
+                } else if count + newAmount > config.maxValue {
+                    newAmount = config.maxValue - count
                 }
                 
                 self.amountProxy.wrappedValue = newAmount
@@ -103,6 +97,7 @@ public struct TallyCounter: View {
                 .animation(.interpolatingSpring(stiffness: 350, damping: 20))
                 .gesture(dragGesture)
         }
+        .environmentObject(configurationStore)
     }
 }
 
@@ -137,12 +132,13 @@ private extension TallyCounter {
         .padding(.horizontal, spacing)
         .background(
             RoundedRectangle(cornerRadius: controlsContainerCornerRadius)
-                .fill(Color.controlsBackground)
+                .fill(config.controlsBackgroundColor)
                 .overlay(
-                    Color.black.opacity(controlsContainerOpacity)
+                    config.controlsBackgroundOverlayColor
+                        .opacity(controlsContainerOpacity)
                         .clipShape(RoundedRectangle(cornerRadius: controlsContainerCornerRadius))
                 )
-                .frame(width: controlsContainerWidth, height: controlsContainerHeigth)
+                .frame(width: config.controlsContainerWidth, height: controlsContainerHeigth)
         )
         .offset(controlsContainerOffset)
     }
@@ -154,15 +150,13 @@ private extension TallyCounter {
         Text("\(count)")
             .foregroundColor(.white)
             .frame(width: labelSize, height: labelSize)
-            .background(Color.labelBackground.opacity(0.8))
+            .background(config.labelBackgroundColor.opacity(0.8))
             .clipShape(Circle())
             .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 5)
             .font(.system(size: labelFontSize, weight: .semibold, design: .rounded))
             .contentShape(Circle())
-            .onTapGesture {
-                self.count = maxValue
-            }
-            .if(showAmountLabel) {
+            .onTapGesture(perform: self.setMax)
+            .if(config.showAmountLabel) {
                 $0.overlay(
                     VStack {
                         HStack {
@@ -186,10 +180,10 @@ private extension TallyCounter {
 //MARK: - Controls Computed Properties
 private extension TallyCounter {
     var defaultControlsOpacity: Double { 0.4 }
-    var spacing: CGFloat { controlsContainerWidth / 10 }
+    var spacing: CGFloat { config.controlsContainerWidth / 10 }
     
-    var controlsContainerHeigth: CGFloat { controlsContainerWidth / 2.5 }
-    var controlsContainerCornerRadius: CGFloat { controlsContainerWidth / 4.9 }
+    var controlsContainerHeigth: CGFloat { config.controlsContainerWidth / 2.5 }
+    var controlsContainerCornerRadius: CGFloat { config.controlsContainerWidth / 4.9 }
     var controlsContainerOffset: CGSize {
         .init(
             width: labelOffset.width / 6,
@@ -201,7 +195,7 @@ private extension TallyCounter {
     }
     var controlsOpacity: Double { labelOffsetYInPercents }
     
-    var controlFrameSize: CGFloat { controlsContainerWidth / 4.2 }
+    var controlFrameSize: CGFloat { config.controlsContainerWidth / 4.2 }
     
     var leftControlOpacity: Double {
         if labelOffset.width < 0 {
@@ -221,9 +215,9 @@ private extension TallyCounter {
 
 //MARK: - Label Computed Properties
 private extension TallyCounter {
-    var labelSize: CGFloat { controlsContainerWidth / 3 }
+    var labelSize: CGFloat { config.controlsContainerWidth / 3 }
     var labelFontSize: CGFloat { labelSize / 2.5 }
-    var labelOffsetXLimit: CGFloat { controlsContainerWidth / 3 + spacing }
+    var labelOffsetXLimit: CGFloat { config.controlsContainerWidth / 3 + spacing }
     var labelOffsetYLimit: CGFloat { controlsContainerHeigth / 1.2 }
     var labelOffsetXInPercents: Double {
         Double(labelOffset.width / labelOffsetXLimit)
@@ -277,11 +271,12 @@ private extension TallyCounter {
 //MARK: - Operations
 private extension TallyCounter {
     func decrease() {
-        if self.count != minValue { self.count -= abs(self.amount == 0 ? 1 : self.amount) }
+        if self.count != config.minValue { self.count -= abs(self.amount == 0 ? 1 : self.amount) }
     }
     func increase() {
-        if self.count < maxValue { self.count += self.amount == 0 ? 1 : self.amount }
+        if self.count < config.maxValue { self.count += self.amount == 0 ? 1 : self.amount }
     }
+    func setMax() { self.count = config.maxValue }
     func reset() { self.count = 0 }
 }
 
@@ -299,8 +294,7 @@ struct PreviewWrapper: View {
             TallyCounter(
                 count: $count,
                 amount: $amount,
-                controlsContainerWidth: 300,
-                showAmountLabel: false
+                config: .init()
             )
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

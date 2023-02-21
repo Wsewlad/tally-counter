@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct ControlButton: View {
+    @EnvironmentObject var configurationStore: ConfigurationStore
+    
+    var config: TallyCounter.Configuration { self.configurationStore.config }
+    
     var systemName: String
     var size: CGFloat
     var isActive: Bool
@@ -21,11 +25,17 @@ struct ControlButton: View {
                 .aspectRatio(contentMode: .fit)
                 .padding(size / 3.5)
                 .frame(width: size, height: size)
-                .foregroundColor(Color.white.opacity(opacity))
+                .foregroundColor(config.controlsColor.opacity(opacity))
                 .background(Color.white.opacity(0.0000001))
                 .clipShape(Circle())
         }
-        .buttonStyle(ControlButtonStyle(systemName: systemName, size: size))
+        .buttonStyle(
+            ControlButtonStyle(
+                systemName: systemName,
+                size: size,
+                config: config
+            )
+        )
         .contentShape(Circle())
     }
 }
