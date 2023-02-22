@@ -2,7 +2,7 @@
 //  CounterView.swift
 //  Tally Counter
 //
-//  Created by  Vladyslav Fil on 29.09.2021.
+//  Created by  Vladyslav Fil on 23.02.2023.
 //
 
 import SwiftUI
@@ -36,22 +36,20 @@ public struct TallyCounter: View {
     }
     
     public var body: some View {
-        let dragGesture = DragGesture()
+        let labelDragGesture = DragGesture()
             .onChanged { value in
                 findDirection(translation: value.translation)
 
-                var newWidth = value.translation.width * 0.75
-                var newHeight = value.translation.height * 0.75
+                var newWidth = value.translation.width * 0.55
+                var newHeight = value.translation.height * 0.55
                 
-                if self.labelOffset.width >= labelOffsetXLimit {
-                    newWidth = value.translation.width * 0.55
-                } else if self.labelOffset.width <= -labelOffsetXLimit {
-                    newWidth = value.translation.width * 0.55
-                }
+                // Set limits
+                newWidth = newWidth > labelOffsetXLimit ? labelOffsetXLimit : newWidth
+                newWidth = newWidth < -labelOffsetXLimit ? -labelOffsetXLimit : newWidth
                 
-                if self.labelOffset.height >= labelOffsetYLimit {
-                    newHeight = newHeight *  0.55
-                } else if value.translation.height < 0 {
+                newHeight = newHeight > labelOffsetYLimit ? labelOffsetYLimit : newHeight
+                
+                if value.translation.height < 0 {
                     newHeight = 0
                 }
                 
@@ -95,7 +93,7 @@ public struct TallyCounter: View {
             
             labelView
                 .animation(.interpolatingSpring(stiffness: 350, damping: 20))
-                .gesture(dragGesture)
+                .gesture(labelDragGesture)
         }
         .environmentObject(configurationStore)
     }
@@ -148,7 +146,10 @@ private extension TallyCounter {
 private extension TallyCounter {
     var labelView: some View {
         Text("\(count)")
+            .lineLimit(1)
+            .minimumScaleFactor(0.1)
             .foregroundColor(.white)
+            .padding(10)
             .frame(width: labelSize, height: labelSize)
             .background(config.labelBackgroundColor.opacity(0.8))
             .clipShape(Circle())
@@ -201,14 +202,14 @@ private extension TallyCounter {
         if labelOffset.width < 0 {
             return -Double(labelOffset.width / (labelOffsetXLimit * 0.65)) + defaultControlsOpacity
         } else {
-            return defaultControlsOpacity - controlsOpacity - labelOffsetXInPercents / 3.5
+            return defaultControlsOpacity
         }
     }
     var rightControlOpacity: Double {
         if labelOffset.width > 0 {
             return Double(labelOffset.width / (labelOffsetXLimit * 0.65)) + defaultControlsOpacity
         } else {
-            return defaultControlsOpacity - controlsOpacity + labelOffsetXInPercents / 3.5
+            return defaultControlsOpacity
         }
     }
 }
@@ -217,7 +218,7 @@ private extension TallyCounter {
 private extension TallyCounter {
     var labelSize: CGFloat { config.controlsContainerWidth / 3 }
     var labelFontSize: CGFloat { labelSize / 2.5 }
-    var labelOffsetXLimit: CGFloat { config.controlsContainerWidth / 3 + spacing }
+    var labelOffsetXLimit: CGFloat { config.controlsContainerWidth / 2 }
     var labelOffsetYLimit: CGFloat { controlsContainerHeigth / 1.2 }
     var labelOffsetXInPercents: Double {
         Double(labelOffset.width / labelOffsetXLimit)
@@ -271,10 +272,14 @@ private extension TallyCounter {
 //MARK: - Operations
 private extension TallyCounter {
     func decrease() {
-        if self.count != config.minValue { self.count -= abs(self.amount == 0 ? 1 : self.amount) }
+        if self.count != config.minValue {
+            self.count -= abs(self.amount == 0 ? 1 : self.amount)
+        }
     }
     func increase() {
-        if self.count < config.maxValue { self.count += self.amount == 0 ? 1 : self.amount }
+        if self.count < config.maxValue {
+            self.count += self.amount == 0 ? 1 : self.amount
+        }
     }
     func setMax() { self.count = config.maxValue }
     func reset() { self.count = 0 }
@@ -283,18 +288,15 @@ private extension TallyCounter {
 //MARK: - Preview
 struct PreviewWrapper: View {
     @State private var count: Int = 0
-    @State private var amount: Int = 0
     
     var body: some View {
         VStack {
-            Text("\(amount)")
-                .font(.largeTitle)
-                .foregroundColor(.white)
-            
             TallyCounter(
                 count: $count,
-                amount: $amount,
-                config: .init()
+                config: .init(
+                    maxValue: 2233500,
+                    controlsContainerWidth: 300
+                )
             )
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -305,5 +307,6 @@ struct PreviewWrapper: View {
 struct TallyCounter_Previews: PreviewProvider {
     static var previews: some View {
         PreviewWrapper()
+            .preferredColorScheme(.dark)
     }
 }
