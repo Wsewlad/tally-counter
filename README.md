@@ -6,7 +6,7 @@
    <a href="https://www.linkedin.com/in/vladyslav-fil">
     <img src="https://img.shields.io/badge/author-Vladyslav%20Fil-brightgreen.svg" alt="Author">
    </a>
-   <a href="https://github.com/Wsewlad/tally-counter/main/README.md#license">
+   <a href="https://github.com/Wsewlad/tally-counter/blob/main/README.md#license">
     <img src="https://img.shields.io/badge/license-MIT-black.svg" alt="License">
    </a>
    <a href="mailto:wladyslawfil@gmail.com">
