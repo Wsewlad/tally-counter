@@ -77,3 +77,12 @@ The Configuration struct has the following properties:
 ## License
 
 TallyCounter is available under the MIT license. See the <a href="https://github.com/Wsewlad/tally-counter/blob/main/LICENSE.md">LICENSE</a> file for more information.
+
+## Support
+###### If my work has brought you value or made your day a little brighter, show your appreciation
+
+<a href="https://www.buymeacoffee.com/vfil">
+<img src="https://github.com/Wsewlad/samples/blob/ebac4f3f66d3ffbd9d1f82bd405f04da3e258dd1/bmc/bmc-button.png" width="170px">
+<br/>
+<img src="https://github.com/Wsewlad/samples/blob/ebac4f3f66d3ffbd9d1f82bd405f04da3e258dd1/bmc/bmc_qr.png" width="170px">
+</a>
