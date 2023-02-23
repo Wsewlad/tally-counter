@@ -202,14 +202,14 @@ private extension TallyCounter {
         if labelOffset.width < 0 {
             return -Double(labelOffset.width / (labelOffsetXLimit * 0.65)) + defaultControlsOpacity
         } else {
-            return defaultControlsOpacity
+            return defaultControlsOpacity - controlsOpacity - labelOffsetXInPercents / 3.5
         }
     }
     var rightControlOpacity: Double {
         if labelOffset.width > 0 {
             return Double(labelOffset.width / (labelOffsetXLimit * 0.65)) + defaultControlsOpacity
         } else {
-            return defaultControlsOpacity
+            return defaultControlsOpacity - controlsOpacity + labelOffsetXInPercents / 3.5
         }
     }
 }
