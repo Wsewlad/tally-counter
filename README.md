@@ -26,7 +26,7 @@ You can install Tally Counter using Swift Package Manager. Simply add the follow
 
 ```Swift
 dependencies: [
-    .package(url: "https://github.com/Wsewlad/tally-counter.git", from: "1.0.0"),
+    .package(url: "https://github.com/Wsewlad/tally-counter.git", from: "1.0.1"),
     /// ...
 ]
 ```
