@@ -1,8 +1,8 @@
-<h1 align="center">
+<h1>
     TallyCounter
 </h1>
 
-<p align="center">
+<p>
    <a href="https://www.linkedin.com/in/vladyslav-fil">
     <img src="https://img.shields.io/badge/author-Vladyslav%20Fil-brightgreen.svg" alt="Author">
    </a>
@@ -15,6 +15,10 @@
 </p>
 
 Tally Counter is a counter element written in SwiftUI with a stretchy animation.
+
+|Preview|
+|---|
+|<img src="https://github.com/Wsewlad/tally-counter/blob/main/resouces/landscape.gif">|
 
 ## Installation
 
@@ -42,15 +46,9 @@ struct Example: View {
     @State private var count: Int = 0
     
     var body: some View {
-        VStack {
-            Text("\(amount)")
-                .font(.largeTitle)
-                .foregroundColor(.white)
-            
-            TallyCounter(
-                count: $count
-            )
-        }
+        TallyCounter(
+            count: $count
+        )
     }
 }
 ```
