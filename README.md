@@ -14,7 +14,7 @@
    </a>
 </p>
 
-Tally Counter is a counter element written in SwiftUI with a stretchy animation.
+Tally Counter is a customizable counter element written in SwiftUI with a stretchy animation.
 
 |Preview|
 |---|
