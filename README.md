@@ -58,6 +58,35 @@ Parameters:
 - `amount` is an optional binding `Int` value. It represents the amount to increment or decrement the count value when the user taps the "-" and "+" buttons or moves the central button left or right.
 - `config` is an instance of the `Configuration` struct which allows customization of the counter's appearance
 
+### `amount`
+
+|Example|
+|---|
+|<img src="https://github.com/Wsewlad/tally-counter/blob/main/resouces/amount.gif">|
+
+```Swift
+struct ContentView: View {
+    @State private var count: Int = 0
+    @State private var amount: Int = 0
+    
+    var body: some View {
+        VStack {
+            Text("Amount: \(amount)")
+                .font(.largeTitle)
+                .foregroundColor(.white)
+            
+            TallyCounter(
+                count: $count,
+                amount: $amount
+            )
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.screenBackground.edgesIgnoringSafeArea(.all))
+    }
+}
+
+```
+
 ## Configuration
 The Configuration struct has the following properties:
 
@@ -70,6 +99,38 @@ The Configuration struct has the following properties:
 - `controlsBackgroundColor` (default: .controlsBackground): The background color of the controls.
 - `controlsOnTapCircleColor` (default: .white): The color of the controls' tap circle.
 - `controlsBackgroundOverlayColor` (default: .black): The background overlay color of the controls.
+
+### `showAmountLabel`
+
+|Example|
+|---|
+|<img src="https://github.com/Wsewlad/tally-counter/blob/main/resouces/showAmountLabel-false.gif">|
+
+```Swift
+struct ContentView: View {
+    @State private var count: Int = 0
+    @State private var amount: Int = 0
+    
+    var body: some View {
+        VStack {
+            Text("Amount: \(amount)")
+                .font(.largeTitle)
+                .foregroundColor(.white)
+            
+            TallyCounter(
+                count: $count,
+                amount: $amount,
+                config: .init(
+                    showAmountLabel: false
+                )
+            )
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.screenBackground.edgesIgnoringSafeArea(.all))
+    }
+}
+
+```
 
 > Inspired by [Ehsan Rahimi](https://dribbble.com/ehsancinematic) Tally Counter Micro-Interaction concept.
 <img src="https://github.com/Wsewlad/TallyCounter/blob/main/dribbble.gif" width="500px">
