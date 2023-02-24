@@ -23,8 +23,10 @@ public extension TallyCounter {
         var maxValue: Int
         var controlsContainerWidth: CGFloat
         var showAmountLabel: Bool
+        var amountLabelColor: Color
         var controlsColor: Color
         var labelBackgroundColor: Color
+        var labelTextColor: Color
         var controlsBackgroundColor: Color
         var controlsOnTapCircleColor: Color
         var controlsBackgroundOverlayColor: Color
@@ -34,8 +36,10 @@ public extension TallyCounter {
             maxValue: Int = 999,
             controlsContainerWidth: CGFloat = 300,
             showAmountLabel: Bool = true,
+            amountLabelColor: Color = .white,
             controlsColor: Color = .white,
             labelBackgroundColor: Color = .labelBackground,
+            labelTextColor: Color = .white,
             controlsBackgroundColor: Color = .controlsBackground,
             controlsOnTapCircleColor: Color = .white,
             controlsBackgroundOverlayColor: Color = .black
@@ -44,8 +48,10 @@ public extension TallyCounter {
             self.maxValue = maxValue
             self.controlsContainerWidth = controlsContainerWidth
             self.showAmountLabel = showAmountLabel
+            self.amountLabelColor = amountLabelColor
             self.controlsColor = controlsColor
             self.labelBackgroundColor = labelBackgroundColor
+            self.labelTextColor = labelTextColor
             self.controlsBackgroundColor = controlsBackgroundColor
             self.controlsOnTapCircleColor = controlsOnTapCircleColor
             self.controlsBackgroundOverlayColor = controlsBackgroundOverlayColor

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreHaptics
 
 public struct TallyCounter: View {
     //MARK: - Private
@@ -16,6 +17,7 @@ public struct TallyCounter: View {
     @State private var localAmount: Int = 0
     @State private var labelOffset: CGSize = .zero
     @State private var draggingDirection: Direction = .none
+    @State var engine: CHHapticEngine?
     
     //MARK: - Configurable
     @Binding var count: Int
@@ -96,6 +98,7 @@ public struct TallyCounter: View {
                 .gesture(labelDragGesture)
         }
         .environmentObject(configurationStore)
+        .onAppear(perform: prepareHaptics)
     }
 }
 
@@ -148,10 +151,10 @@ private extension TallyCounter {
         Text("\(count)")
             .lineLimit(1)
             .minimumScaleFactor(0.1)
-            .foregroundColor(.white)
+            .foregroundColor(config.labelTextColor)
             .padding(10)
             .frame(width: labelSize, height: labelSize)
-            .background(config.labelBackgroundColor.opacity(0.8))
+            .background(config.labelBackgroundColor)
             .clipShape(Circle())
             .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 5)
             .font(.system(size: labelFontSize, weight: .semibold, design: .rounded))
@@ -166,7 +169,7 @@ private extension TallyCounter {
                                 Text("\(amount > 0 ? "+" : "")\(amount)")
                             }
                         }
-                        .foregroundColor(.white.opacity(0.6))
+                        .foregroundColor(config.amountLabelColor)
                         .font(.system(size: labelFontSize / 2, weight: .semibold, design: .rounded))
                         .animation(.interactiveSpring())
                         
@@ -274,11 +277,15 @@ private extension TallyCounter {
     func decrease() {
         if self.count != config.minValue {
             self.count -= abs(self.amount == 0 ? 1 : self.amount)
+            
+            complexSuccess()
         }
     }
     func increase() {
         if self.count < config.maxValue {
             self.count += self.amount == 0 ? 1 : self.amount
+            
+            complexSuccess()
         }
     }
     func setMax() { self.count = config.maxValue }
