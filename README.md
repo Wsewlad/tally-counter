@@ -94,8 +94,10 @@ The Configuration struct has the following properties:
 - `maxValue` (default: 999): The maximum value that the counter can have.
 - `controlsContainerWidth` (default: 300): The width of the controls container.
 - `showAmountLabel` (default: true): Whether to show the amount label.
+- `amountLabelColor` (default: .white): The text color of the amount label.
 - `controlsColor` (default: .white): The color of the controls.
 - `labelBackgroundColor` (default: .labelBackground): The background color of the amount label.
+- `labelTextColor` (default: .white) - The text color of the label.
 - `controlsBackgroundColor` (default: .controlsBackground): The background color of the controls.
 - `controlsOnTapCircleColor` (default: .white): The color of the controls' tap circle.
 - `controlsBackgroundOverlayColor` (default: .black): The background overlay color of the controls.
