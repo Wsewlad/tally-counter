@@ -18,7 +18,7 @@ Tally Counter is a customizable counter element written in SwiftUI with a stretc
 
 |Preview|
 |---|
-|<img src="https://github.com/Wsewlad/tally-counter/blob/main/resouces/landscape.gif">|
+|<img src="https://github.com/Wsewlad/tally-counter/blob/main/resouces/main.gif">|
 
 ## Installation
 
@@ -110,28 +110,29 @@ The Configuration struct has the following properties:
 |<img src="https://github.com/Wsewlad/tally-counter/blob/main/resouces/showAmountLabel-false.gif">|
 
 ```Swift
-struct ContentView: View {
-    @State private var count: Int = 0
-    @State private var amount: Int = 0
-    
-    var body: some View {
-        VStack {
-            Text("Amount: \(amount)")
-                .font(.largeTitle)
-                .foregroundColor(.white)
-            
-            TallyCounter(
-                count: $count,
-                amount: $amount,
-                config: .init(
-                    showAmountLabel: false
-                )
-            )
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.screenBackground.edgesIgnoringSafeArea(.all))
-    }
-}
+TallyCounter(
+    count: $count,
+    amount: $amount,
+    config: .init(
+        showAmountLabel: false
+    )
+)
+```
+
+### `amountLabelColor`
+
+|Example|
+|---|
+|<img src="https://github.com/Wsewlad/tally-counter/blob/main/resouces/amountLabelColor.gif">|
+
+```Swift
+TallyCounter(
+    count: $count,
+    amount: $amount,
+    config: .init(
+        amountLabelColor: .green
+    )
+)
 ```
 
 ### `controlsColor`
@@ -141,29 +142,14 @@ struct ContentView: View {
 |<img src="https://github.com/Wsewlad/tally-counter/blob/main/resouces/controlsColor.gif">|
 
 ```Swift
-struct ContentView: View {
-    @State private var count: Int = 0
-    @State private var amount: Int = 0
-    
-    var body: some View {
-        VStack {
-            Text("Amount: \(amount)")
-                .font(.largeTitle)
-                .foregroundColor(.white)
-            
-            TallyCounter(
-                count: $count,
-                amount: $amount,
-                config: .init(
-                    showAmountLabel: false,
-                    controlsColor: .blue
-                )
-            )
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.screenBackground.edgesIgnoringSafeArea(.all))
-    }
-}
+TallyCounter(
+    count: $count,
+    amount: $amount,
+    config: .init(
+        showAmountLabel: false,
+        controlsColor: .blue
+    )
+)
 ```
 
 ### `labelBackgroundColor`
@@ -173,33 +159,15 @@ struct ContentView: View {
 |<img src="https://github.com/Wsewlad/tally-counter/blob/main/resouces/labelBackgroundColor.gif">|
 
 ```Swift
-struct ContentView: View {
-    @State private var count: Int = 0
-    @State private var amount: Int = 0
-    
-    var body: some View {
-        VStack {
-            Text("Count: \(count)")
-                .font(.largeTitle)
-                .foregroundColor(.white)
-            Text("Amount: \(amount)")
-                .font(.largeTitle)
-                .foregroundColor(.white)
-            
-            TallyCounter(
-                count: $count,
-                amount: $amount,
-                config: .init(
-                    showAmountLabel: false,
-                    controlsColor: .blue,
-                    labelBackgroundColor: .red
-                )
-            )
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.screenBackground.edgesIgnoringSafeArea(.all))
-    }
-}
+TallyCounter(
+    count: $count,
+    amount: $amount,
+    config: .init(
+        showAmountLabel: false,
+        controlsColor: .blue,
+        labelBackgroundColor: .red
+    )
+)
 ```
 
 ### `controlsBackgroundColor`
@@ -209,34 +177,16 @@ struct ContentView: View {
 |<img src="https://github.com/Wsewlad/tally-counter/blob/main/resouces/controlsBackgroundColor.gif">|
 
 ```Swift
-struct ContentView: View {
-    @State private var count: Int = 0
-    @State private var amount: Int = 0
-    
-    var body: some View {
-        VStack {
-            Text("Count: \(count)")
-                .font(.largeTitle)
-                .foregroundColor(.white)
-            Text("Amount: \(amount)")
-                .font(.largeTitle)
-                .foregroundColor(.white)
-            
-            TallyCounter(
-                count: $count,
-                amount: $amount,
-                config: .init(
-                    showAmountLabel: false,
-                    controlsColor: .blue,
-                    labelBackgroundColor: .red,
-                    controlsBackgroundColor: .green
-                )
-            )
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.screenBackground.edgesIgnoringSafeArea(.all))
-    }
-}
+TallyCounter(
+    count: $count,
+    amount: $amount,
+    config: .init(
+        showAmountLabel: false,
+        controlsColor: .blue,
+        labelBackgroundColor: .red,
+        controlsBackgroundColor: .green
+    )
+)
 ```
 
 ### `controlsOnTapCircleColor`
@@ -246,35 +196,17 @@ struct ContentView: View {
 |<img src="https://github.com/Wsewlad/tally-counter/blob/main/resouces/controlsOnTapCircleColor.gif">|
 
 ```Swift
-struct ContentView: View {
-    @State private var count: Int = 0
-    @State private var amount: Int = 0
-    
-    var body: some View {
-        VStack {
-            Text("Count: \(count)")
-                .font(.largeTitle)
-                .foregroundColor(.white)
-            Text("Amount: \(amount)")
-                .font(.largeTitle)
-                .foregroundColor(.white)
-            
-            TallyCounter(
-                count: $count,
-                amount: $amount,
-                config: .init(
-                    showAmountLabel: false,
-                    controlsColor: .blue,
-                    labelBackgroundColor: .red,
-                    controlsBackgroundColor: .green,
-                    controlsOnTapCircleColor: .yellow
-                )
-            )
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.screenBackground.edgesIgnoringSafeArea(.all))
-    }
-}
+TallyCounter(
+    count: $count,
+    amount: $amount,
+    config: .init(
+        showAmountLabel: false,
+        controlsColor: .blue,
+        labelBackgroundColor: .red,
+        controlsBackgroundColor: .green,
+        controlsOnTapCircleColor: .yellow
+    )
+)
 ```
 
 ### `controlsBackgroundOverlayColor`
@@ -284,36 +216,18 @@ struct ContentView: View {
 |<img src="https://github.com/Wsewlad/tally-counter/blob/main/resouces/controlsBackgroundOverlayColor.gif">|
 
 ```Swift
-struct ContentView: View {
-    @State private var count: Int = 0
-    @State private var amount: Int = 0
-    
-    var body: some View {
-        VStack {
-            Text("Count: \(count)")
-                .font(.largeTitle)
-                .foregroundColor(.white)
-            Text("Amount: \(amount)")
-                .font(.largeTitle)
-                .foregroundColor(.white)
-            
-            TallyCounter(
-                count: $count,
-                amount: $amount,
-                config: .init(
-                    showAmountLabel: false,
-                    controlsColor: .blue,
-                    labelBackgroundColor: .red,
-                    controlsBackgroundColor: .white,
-                    controlsOnTapCircleColor: .yellow,
-                    controlsBackgroundOverlayColor: .red
-                )
-            )
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.screenBackground.edgesIgnoringSafeArea(.all))
-    }
-}
+TallyCounter(
+    count: $count,
+    amount: $amount,
+    config: .init(
+        showAmountLabel: false,
+        controlsColor: .blue,
+        labelBackgroundColor: .red,
+        controlsBackgroundColor: .white,
+        controlsOnTapCircleColor: .yellow,
+        controlsBackgroundOverlayColor: .red
+    )
+)
 ```
 
 > Inspired by [Ehsan Rahimi](https://dribbble.com/ehsancinematic) Tally Counter Micro-Interaction concept.
