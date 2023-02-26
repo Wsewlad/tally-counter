@@ -101,6 +101,7 @@ The Configuration struct has the following properties:
 - `controlsBackgroundColor` (default: .controlsBackground): The background color of the controls.
 - `controlsOnTapCircleColor` (default: .white): The color of the controls' tap circle.
 - `controlsBackgroundOverlayColor` (default: .black): The background overlay color of the controls.
+- `hapticsEnabled` (default: true): A boolean value indicating whether haptic feedback should be enabled when interacting with the counter element. When set to true, the element will play custom haptic feedback using CHHapticEngine when the user taps the increment and decrement buttons or swipes on the central button. When set to false, no haptic feedback will be played.
 
 ### `showAmountLabel`
 
