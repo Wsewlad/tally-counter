@@ -30,6 +30,7 @@ public extension TallyCounter {
         var controlsBackgroundColor: Color
         var controlsOnTapCircleColor: Color
         var controlsBackgroundOverlayColor: Color
+        var hapticsEnabled: Bool
         
         public init(
             minValue: Int = 0,
@@ -42,7 +43,8 @@ public extension TallyCounter {
             labelTextColor: Color = .white,
             controlsBackgroundColor: Color = .controlsBackground,
             controlsOnTapCircleColor: Color = .white,
-            controlsBackgroundOverlayColor: Color = .black
+            controlsBackgroundOverlayColor: Color = .black,
+            hapticsEnabled: Bool = true
         ) {
             self.minValue = minValue
             self.maxValue = maxValue
@@ -55,6 +57,7 @@ public extension TallyCounter {
             self.controlsBackgroundColor = controlsBackgroundColor
             self.controlsOnTapCircleColor = controlsOnTapCircleColor
             self.controlsBackgroundOverlayColor = controlsBackgroundOverlayColor
+            self.hapticsEnabled = hapticsEnabled
         }
     }
 

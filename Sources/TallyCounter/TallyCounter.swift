@@ -15,9 +15,19 @@ public struct TallyCounter: View {
     }
     
     @State private var localAmount: Int = 0
-    @State private var labelOffset: CGSize = .zero
+    @State var labelOffset: CGSize = .zero
     @State private var draggingDirection: Direction = .none
+    
+    //MARK: - Haptics
     @State var engine: CHHapticEngine?
+    @State var continuousPlayer: CHHapticAdvancedPatternPlayer?
+    @State var engineNeedsStart = true
+    // Tokens to track whether app is in the foreground or the background:
+    @State var foregroundToken: NSObjectProtocol?
+    @State var backgroundToken: NSObjectProtocol?
+    let initialIntensity: Float = 0.5
+    let initialSharpness: Float = 0.5
+    var hapticsEnabled: Bool { CHHapticEngine.capabilitiesForHardware().supportsHaptics && config.hapticsEnabled }
     
     //MARK: - Configurable
     @Binding var count: Int
@@ -71,6 +81,8 @@ public struct TallyCounter: View {
                 }
                 
                 self.amountProxy.wrappedValue = newAmount
+                
+                playHapticContinuous()
             }
             .onEnded { value in
                 if draggingDirection == .right {
@@ -87,6 +99,8 @@ public struct TallyCounter: View {
                     self.labelOffset = .zero
                     self.draggingDirection = .none
                 }
+                
+                stopHapticsContinuousPlayer()
             }
         
         return ZStack {
@@ -218,7 +232,7 @@ private extension TallyCounter {
 }
 
 //MARK: - Label Computed Properties
-private extension TallyCounter {
+extension TallyCounter {
     var labelSize: CGFloat { config.controlsContainerWidth / 3 }
     var labelFontSize: CGFloat { labelSize / 2.5 }
     var labelOffsetXLimit: CGFloat { config.controlsContainerWidth / 2 }
@@ -276,20 +290,30 @@ private extension TallyCounter {
 private extension TallyCounter {
     func decrease() {
         if self.count != config.minValue {
-            self.count -= abs(self.amount == 0 ? 1 : self.amount)
+            let amountToSubtract = abs(self.amount == 0 ? 1 : self.amount)
+            self.count -= amountToSubtract
             
-            complexSuccess()
+            let extra = Float(amountToSubtract) / 200 > 0.5 ? 0.5 : Float(amountToSubtract) / 200
+            playHapticTransient(intensity: initialIntensity + extra, sharpness: initialSharpness + extra)
         }
     }
     func increase() {
         if self.count < config.maxValue {
-            self.count += self.amount == 0 ? 1 : self.amount
+            let amountToAdd = self.amount == 0 ? 1 : self.amount
+            self.count += amountToAdd
             
-            complexSuccess()
+            let extra = Float(amountToAdd) / 200 > 0.5 ? 0.5 : Float(amountToAdd) / 200
+            playHapticTransient(intensity: initialIntensity + extra, sharpness: initialSharpness + extra)
         }
     }
-    func setMax() { self.count = config.maxValue }
-    func reset() { self.count = 0 }
+    func setMax() {
+        self.count = config.maxValue
+        playHapticTransient(intensity: 1, sharpness: 1)
+    }
+    func reset() {
+        self.count = 0
+        playHapticTransient(intensity: 1, sharpness: 1)
+    }
 }
 
 //MARK: - Preview
